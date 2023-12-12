@@ -32,40 +32,17 @@
       window.open('https://twitter.com/ainsley_mainly', '_blank');
     }
 
-    function generateTextWithProbabilities(lines) {
-      const probabilities = {};
-
-      lines.forEach((line, index, array) => {
-        const words = line.split(' ');
-
-        for (let i = 0; i < words.length - 1; i++) {
-          const currentWord = words[i];
-          const nextWord = words[i + 1];
-
-          if (!probabilities[currentWord]) {
-            probabilities[currentWord] = [];
-          }
-
-          probabilities[currentWord].push(nextWord);
-        }
-
-        // Consider the last word in a line
-        const lastWord = words[words.length - 1];
-        if (!probabilities[lastWord] && index !== array.length - 1) {
-          probabilities[lastWord] = [];
-        }
-      });
-
-      return probabilities;
-    }
-
     function generateOutput() {
       fetch('db.txt')
         .then(response => response.text())
         .then(textContent => {
           const lines = textContent.split('\n').map(line => line.trim());
-          const probabilities = generateTextWithProbabilities(lines);
-          const generatedText = generateTextFromProbabilities(probabilities, 200);
+
+          // Select a random line from the array
+          const randomIndex = Math.floor(Math.random() * lines.length);
+          const generatedText = lines[randomIndex];
+
+          document.getElementById('output').innerText = generatedText;
         })
         .catch(error => console.error('Error loading file:', error));
     }

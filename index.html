@@ -39,11 +39,11 @@
       let currentNgram = ngrams[Math.floor(Math.random() * ngrams.length)];
       let generatedText = currentNgram.split(' ');
 
-      for (let i = 0; i < length - generatedText.length; i++) {
+      while (generatedText.length < length) {
         if (model[currentNgram]) {
           const nextWord = model[currentNgram][Math.floor(Math.random() * model[currentNgram].length)];
           generatedText.push(nextWord);
-          currentNgram = generatedText.slice(-generatedText.length + 1).join(' ');
+          currentNgram = generatedText.slice(-generatedText.length + n).join(' ');
         } else {
           break;
         }
@@ -51,6 +51,7 @@
 
       return generatedText.join(' ');
     }
+
 
     function buildNgramModel(text, n = 2) {
       const words = text.split(' ');

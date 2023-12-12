@@ -32,19 +32,73 @@
       window.open('https://twitter.com/ainsley_mainly', '_blank');
     }
 
+    function buildMarkovModel(text, order = 2) {
+      const words = text.split(' ');
+      const markovModel = {};
+
+      for (let i = 0; i < words.length - order; i++) {
+        const prefix = words.slice(i, i + order).join(' ');
+        const nextWord = words[i + order];
+
+        if (!markovModel[prefix]) {
+          markovModel[prefix] = { words: [], probabilities: [] };
+        }
+
+        markovModel[prefix].words.push(nextWord);
+      }
+
+      // Calculate probabilities
+      Object.keys(markovModel).forEach(prefix => {
+        const wordCount = markovModel[prefix].words.length;
+        const probabilities = markovModel[prefix].words.reduce((acc, word) => {
+          acc[word] = (acc[word] || 0) + 1 / wordCount;
+          return acc;
+        }, {});
+        markovModel[prefix].probabilities = probabilities;
+      });
+
+      return markovModel;
+    }
+
     function generateOutput() {
       fetch('db.txt')
         .then(response => response.text())
         .then(textContent => {
-          const lines = textContent.split('\n').map(line => line.trim());
+          const markovModel = buildMarkovModel(textContent);
+          const order = 2; // Change this to the desired order of the Markov model
 
-          // Select a random line from the array
-          const randomIndex = Math.floor(Math.random() * lines.length);
-          const generatedText = lines[randomIndex];
+          // Generate text
+          let currentPrefix = Object.keys(markovModel)[Math.floor(Math.random() * Object.keys(markovModel).length)];
+          let generatedText = currentPrefix.split(' ');
 
-          document.getElementById('output').innerText = generatedText;
+          while (generatedText.length < 50) {
+            if (markovModel[currentPrefix]) {
+              const nextWord = selectNextWord(markovModel[currentPrefix].probabilities);
+              generatedText.push(nextWord);
+              currentPrefix = generatedText.slice(-order).join(' ');
+            } else {
+              break;
+            }
+          }
+
+          document.getElementById('output').innerText = generatedText.join(' ');
         })
         .catch(error => console.error('Error loading file:', error));
+    }
+
+    function selectNextWord(probabilities) {
+      const rand = Math.random();
+      let cumulativeProbability = 0;
+
+      for (const [word, probability] of Object.entries(probabilities)) {
+        cumulativeProbability += probability;
+        if (rand <= cumulativeProbability) {
+          return word;
+        }
+      }
+
+      // Default case (shouldn't happen)
+      return '';
     }
   </script>
 </body>

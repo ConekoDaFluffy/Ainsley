@@ -25,61 +25,47 @@
 
   <script>
     function followDev() {
-      // Replace 'dev_twitter_url_here' with the actual Twitter profile URL
       window.open('https://twitter.com/PixelKat6', '_blank');
     }
 
     function followPixelkat() {
-      // Replace 'pixelkat_twitter_url_here' with the actual Twitter profile URL
       window.open('https://twitter.com/ainsley_mainly', '_blank');
     }
 
-    function generateTextWithNgram(model, length = 100) {
-      const ngrams = Object.keys(model);
-      let currentNgram = ngrams[Math.floor(Math.random() * ngrams.length)];
-      let generatedText = currentNgram.split(' ');
+    function generateTextWithProbabilities(lines) {
+      const probabilities = {};
 
-      while (generatedText.length < length) {
-        if (model[currentNgram]) {
-          const nextWord = model[currentNgram][Math.floor(Math.random() * model[currentNgram].length)];
-          generatedText.push(nextWord);
-          currentNgram = generatedText.slice(-generatedText.length + n).join(' ');
-        } else {
-          break;
-        }
-      }
+      lines.forEach((line, index, array) => {
+        const words = line.split(' ');
 
-      return generatedText.join(' ');
-    }
+        for (let i = 0; i < words.length - 1; i++) {
+          const currentWord = words[i];
+          const nextWord = words[i + 1];
 
+          if (!probabilities[currentWord]) {
+            probabilities[currentWord] = [];
+          }
 
-    function buildNgramModel(text, n = 2) {
-      const words = text.split(' ');
-      const ngramModel = {};
-
-      for (let i = 0; i < words.length - n; i++) {
-        const ngram = words.slice(i, i + n);
-        const nextWord = words[i + n];
-
-        if (!ngramModel[ngram]) {
-          ngramModel[ngram] = [];
+          probabilities[currentWord].push(nextWord);
         }
 
-        ngramModel[ngram].push(nextWord);
-      }
+        // Consider the last word in a line
+        const lastWord = words[words.length - 1];
+        if (!probabilities[lastWord] && index !== array.length - 1) {
+          probabilities[lastWord] = [];
+        }
+      });
 
-      return ngramModel;
+      return probabilities;
     }
 
     function generateOutput() {
-      fetch('db.txt') // Assuming 'db.txt' is in the same directory as your HTML file
+      fetch('db.txt')
         .then(response => response.text())
         .then(textContent => {
-          const ngramModel = buildNgramModel(textContent);
-          const generatedText = generateTextWithNgram(ngramModel, 200);
-
-          // Display the generated text in the output element
-          document.getElementById('output').innerText = generatedText;
+          const lines = textContent.split('\n').map(line => line.trim());
+          const probabilities = generateTextWithProbabilities(lines);
+          const generatedText = generateTextFromProbabilities(probabilities, 200);
         })
         .catch(error => console.error('Error loading file:', error));
     }

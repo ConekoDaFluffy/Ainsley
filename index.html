@@ -1,1 +1,87 @@
-<H1>Hello :3</H1>
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div align="center">
+    <h1>PIXELKAT BOT</h1>
+    <p>Click the generate button to create another message</p>
+    <div id="generator">
+      <button id="followDevButton" onclick="followDev()">
+        <img src="ainsley.png" alt="Ainsley icon"> Follow the dev!
+      </button>
+      <button id="followPixelkatButton" onclick="followPixelkat()">
+        <img src="pixelkat.png" alt="X icon"> Follow Pixelkat!
+      </button>
+      <p id="output">
+        OUTPUT HERE!!
+      </p>
+      <button id="generateButton" onclick="generateOutput()">
+        Generate
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function followDev() {
+      // Replace 'dev_twitter_url_here' with the actual Twitter profile URL
+      window.open('dev_twitter_url_here', '_blank');
+    }
+
+    function followPixelkat() {
+      // Replace 'pixelkat_twitter_url_here' with the actual Twitter profile URL
+      window.open('pixelkat_twitter_url_here', '_blank');
+    }
+
+    function generateTextWithNgram(model, length = 100) {
+      const ngrams = Object.keys(model);
+      let currentNgram = ngrams[Math.floor(Math.random() * ngrams.length)];
+      let generatedText = currentNgram.split(' ');
+
+      for (let i = 0; i < length - generatedText.length; i++) {
+        if (model[currentNgram]) {
+          const nextWord = model[currentNgram][Math.floor(Math.random() * model[currentNgram].length)];
+          generatedText.push(nextWord);
+          currentNgram = generatedText.slice(-generatedText.length + 1).join(' ');
+        } else {
+          break;
+        }
+      }
+
+      return generatedText.join(' ');
+    }
+
+    function buildNgramModel(text, n = 2) {
+      const words = text.split(' ');
+      const ngramModel = {};
+
+      for (let i = 0; i < words.length - n; i++) {
+        const ngram = words.slice(i, i + n);
+        const nextWord = words[i + n];
+
+        if (!ngramModel[ngram]) {
+          ngramModel[ngram] = [];
+        }
+
+        ngramModel[ngram].push(nextWord);
+      }
+
+      return ngramModel;
+    }
+
+    function generateOutput() {
+      fetch('db.txt') // Assuming 'db.txt' is in the same directory as your HTML file
+        .then(response => response.text())
+        .then(textContent => {
+          const ngramModel = buildNgramModel(textContent);
+          const generatedText = generateTextWithNgram(ngramModel, 50);
+
+          // Display the generated text in the output element
+          document.getElementById('output').innerText = generatedText;
+        })
+        .catch(error => console.error('Error loading file:', error));
+    }
+  </script>
+</body>
+</html>

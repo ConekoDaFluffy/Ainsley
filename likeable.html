@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <title>Companions</title>
+    </head>
+    <body>
+        <div align="center">
+            <h1>COOL PEOPLE!</h1>
+            <p>These people are worth checking out and following, most of them are followers of mine too!</p>
+            
+            <button id="button" onclick="followPixelkat()">
+                <img src="images/pixelkat.png" alt="PixelKat6"> Follow Pixelkat!
+            </button>
+            <button id="button" onclick="followYabby()">
+                <img src="images/yab.png" alt="yab_is_here"> Follow Yab!
+            </button>
+            <button id="button" onclick="followJib()">
+                <img src="images/jib.png" alt="jib_loger_alt"> Follow Jib!
+            </button>
+            <button id="button" onclick="followPeeter()">
+                <img src="images/peeter.png" alt="jib_loger_alt"> Follow Peeter!
+            </button>
+
+            <button id="button" onclick="openMain()">
+                Back
+            </button>
+        </div>
+
+        <script src="navigation.js"></script>
+
+        <script>
+            function followYabby()
+            {
+                window.open('https://twitter.com/intent/user?screen_name=yab_is_here', '_blank')
+            }
+
+            function followPeeter()
+            {
+                window.open('https://twitter.com/intent/user?screen_name=Peetorlol', '_blank')
+            }
+
+            function followJib()
+            {
+                window.open('https://twitter.com/intent/user?screen_name=jib_loger_alt', '_blank');
+            }
+
+            function followPixelkat() {
+                window.open('https://twitter.com/intent/user?screen_name=PixelKat6', '_blank');
+            }
+        </script>
+    </body>
+</html>

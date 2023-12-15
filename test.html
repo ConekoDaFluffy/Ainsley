@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        button
+        {
+            border-radius: 10%;
+            font-size: 200%;
+            border-spacing: 20px;
+        }
+        p
+        {
+            color: white;
+        }
+        h2
+        {
+            color: rgb(0, 191, 255);
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000725;
+            padding: 20px;
+        }
+        .profile {
+            width: 300px;
+            border: 1px solid #0036c9;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .profile h2, .profile p {
+            margin: 0 0 10px 0;
+        }
+        #drawCanvas {
+            border: 1px solid #0036c9;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div align="center">
+        <div class="profile" align="left">
+            <img src="https://preview.redd.it/my-proto-boi-shiro-v0-8wz5q4dg8pda1.jpeg?width=512&format=pjpg&auto=webp&s=b5f9587a7af520e872eee04088a964f651dbf1fe" alt="Profile Picture">
+            <h2>Daemon</h2>
+            <p>@daemonshadey</p>
+            <p>About Me: Known for my laid-back attitude, I enjoy the simpler things in life.</p>
+        </div>
+        <button id="data" onclick="revealData()">Personal data</button>
+        <div id="datacontainer"></div>
+    </div>
+    <script>
+        const sillyDataForThatGayDude = [
+            "IP. 92.28.211.234",
+            "N: 43.7462",
+            "W: 12.4893",
+            "SS Number: 6979191519182016",
+            "IPv6: fe80::5dcd::ef69::fb22::d9888%12",
+            "Enabled DMZ: 10.112.42.15",
+            "MAC: 5A:78:3E:7E:00",
+            "ISP: Ucom Universal DNS: 8.8.8.8",
+            "ALT DNS: 1.1.1.8.1",
+            "Dlink WAN: 100.23.10.15",
+            "GATEWAY: 192.168.0.1",
+            "SUBNET MASK: 255.255.0.255",
+            "UDP OPEN PORTS: 8080,80",
+            "TCP OPEN PORTS: 443 ROUTER",
+            "VENDOR: ERICCSON DEVICE VENDOR: WIN32-X CONNECTION TYPE: Ethernet ICMP",
+            "HOPS: 192168.0.1 192168.1.1 100.73.43.4 host-132.12.32.167.ucom.com host-66.120.12.111.ucom.com 36.134.67.189 216.239.78.111 sof02s32-in-f14.1e100.net TOTAL HOPS: 8 ACTIVE SERVICES: [HTTP] 192.168.3.1:80=>92.28.211.234:80 [HTTP] 192.168.3.1:443=>92.28.211.234:443 [UDP] 192.168.0.1:788=>192.168.1:6557 [TCP] 192.168.1.1:67891=>92.28.211.234:345 [TCP] 192.168.52.43:7777=>192.168.1.1:7778 [TCP] 192.168.78.12:898=>192.168.89.9:667",
+            "EXTERNAL MAC: 6U:78:89:ER:O4",
+            "MODEM JUMPS: 64"
+        ]
+
+        let ind = 0;
+
+        function revealData()
+        {
+            var element = document.getElementById("data");
+            element.textContent = "More data";
+
+            var element2 = document.getElementById("datacontainer");
+
+            var newText = document.createTextNode(sillyDataForThatGayDude[ind]);
+            ind++;
+
+            document.appendChild(newText);
+
+            if (ind >= sillyDataForThatGayDude.length)
+            {
+                element.remove();
+            }
+        }
+    </script>
+</body>
+</html>
